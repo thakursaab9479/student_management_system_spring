@@ -1,8 +1,10 @@
 package com.vrsingh.sms.student_management_system_spring.controller;
+
 import com.vrsingh.sms.student_management_system_spring.entity.Student;
 import com.vrsingh.sms.student_management_system_spring.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,11 +20,13 @@ public class StudentController {
         this.studentService = studentService;
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
     @GetMapping
     public List<Student> getAllStudents() {
         return studentService.getAllStudents();
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
     @GetMapping("/{id}")
     public ResponseEntity<Student> getStudentById(@PathVariable Long id) {
         return studentService.getStudentById(id)
@@ -30,16 +34,19 @@ public class StudentController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public Student createStudent(@RequestBody Student student) {
         return studentService.createStudent(student);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public Student updateStudent(@PathVariable Long id, @RequestBody Student student) {
         return studentService.updateStudent(id, student);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public void deleteStudent(@PathVariable Long id) {
         studentService.deleteStudent(id);

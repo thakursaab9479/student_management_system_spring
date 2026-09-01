@@ -1,7 +1,9 @@
 package com.vrsingh.sms.student_management_system_spring.controller;
+
 import com.vrsingh.sms.student_management_system_spring.entity.Attendance;
 import com.vrsingh.sms.student_management_system_spring.service.AttendanceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -18,11 +20,13 @@ public class AttendanceController {
         this.attendanceService = attendanceService;
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','TEACHER','STUDENT')")
     @GetMapping
     public List<Attendance> getAllAttendance() {
         return attendanceService.getAllAttendance();
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
     @PostMapping
     public Attendance markAttendance(@RequestParam Long studentId,
                                      @RequestParam Long courseId,
@@ -31,6 +35,7 @@ public class AttendanceController {
         return attendanceService.markAttendance(studentId, courseId, classDate, status);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
     @DeleteMapping("/{id}")
     public void deleteAttendance(@PathVariable Long id) {
         attendanceService.deleteAttendance(id);

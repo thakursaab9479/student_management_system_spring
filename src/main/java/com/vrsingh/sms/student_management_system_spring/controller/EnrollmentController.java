@@ -1,7 +1,9 @@
 package com.vrsingh.sms.student_management_system_spring.controller;
+
 import com.vrsingh.sms.student_management_system_spring.entity.Enrollment;
 import com.vrsingh.sms.student_management_system_spring.service.EnrollmentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -18,11 +20,13 @@ public class EnrollmentController {
         this.enrollmentService = enrollmentService;
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
     @GetMapping
     public List<Enrollment> getAllEnrollments() {
         return enrollmentService.getAllEnrollments();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public Enrollment enrollStudent(@RequestParam Long studentId,
                                     @RequestParam Long courseId,
@@ -30,6 +34,7 @@ public class EnrollmentController {
         return enrollmentService.enrollStudent(studentId, courseId, enrollmentDate);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public void deleteEnrollment(@PathVariable Long id) {
         enrollmentService.deleteEnrollment(id);

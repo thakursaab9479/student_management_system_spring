@@ -1,8 +1,10 @@
 package com.vrsingh.sms.student_management_system_spring.controller;
+
 import com.vrsingh.sms.student_management_system_spring.entity.Teacher;
 import com.vrsingh.sms.student_management_system_spring.service.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,11 +20,13 @@ public class TeacherController {
         this.teacherService = teacherService;
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
     @GetMapping
     public List<Teacher> getAllTeachers() {
         return teacherService.getAllTeachers();
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
     @GetMapping("/{id}")
     public ResponseEntity<Teacher> getTeacherById(@PathVariable Long id) {
         return teacherService.getTeacherById(id)
@@ -30,16 +34,19 @@ public class TeacherController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public Teacher createTeacher(@RequestBody Teacher teacher) {
         return teacherService.createTeacher(teacher);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public Teacher updateTeacher(@PathVariable Long id, @RequestBody Teacher teacher) {
         return teacherService.updateTeacher(id, teacher);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public void deleteTeacher(@PathVariable Long id) {
         teacherService.deleteTeacher(id);
