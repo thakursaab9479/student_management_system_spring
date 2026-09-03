@@ -3,11 +3,11 @@ package com.vrsingh.sms.student_management_system_spring.controller;
 import com.vrsingh.sms.student_management_system_spring.entity.Enrollment;
 import com.vrsingh.sms.student_management_system_spring.service.EnrollmentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/enrollments")
@@ -22,8 +22,10 @@ public class EnrollmentController {
 
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
     @GetMapping
-    public List<Enrollment> getAllEnrollments() {
-        return enrollmentService.getAllEnrollments();
+    public Page<Enrollment> getAllEnrollments(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return enrollmentService.getAllEnrollments(page, size);
     }
 
     @PreAuthorize("hasRole('ADMIN')")

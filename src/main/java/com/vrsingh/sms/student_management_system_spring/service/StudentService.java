@@ -1,10 +1,13 @@
 package com.vrsingh.sms.student_management_system_spring.service;
+
 import com.vrsingh.sms.student_management_system_spring.entity.Student;
 import com.vrsingh.sms.student_management_system_spring.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -17,8 +20,9 @@ public class StudentService {
         this.studentRepository = studentRepository;
     }
 
-    public List<Student> getAllStudents() {
-        return studentRepository.findAll();
+    public Page<Student> getAllStudents(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return studentRepository.findAll(pageable);
     }
 
     public Optional<Student> getStudentById(Long id) {
@@ -34,6 +38,7 @@ public class StudentService {
                 .orElseThrow(() -> new RuntimeException("Student not found with id " + id));
 
         student.setFirstName(studentDetails.getFirstName());
+        student.setMiddleName(studentDetails.getMiddleName());
         student.setLastName(studentDetails.getLastName());
         student.setEmail(studentDetails.getEmail());
         student.setPhoneNumber(studentDetails.getPhoneNumber());

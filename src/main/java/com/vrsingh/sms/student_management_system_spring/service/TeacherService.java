@@ -1,10 +1,13 @@
 package com.vrsingh.sms.student_management_system_spring.service;
+
 import com.vrsingh.sms.student_management_system_spring.entity.Teacher;
 import com.vrsingh.sms.student_management_system_spring.repository.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -17,8 +20,9 @@ public class TeacherService {
         this.teacherRepository = teacherRepository;
     }
 
-    public List<Teacher> getAllTeachers() {
-        return teacherRepository.findAll();
+    public Page<Teacher> getAllTeachers(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return teacherRepository.findAll(pageable);
     }
 
     public Optional<Teacher> getTeacherById(Long id) {

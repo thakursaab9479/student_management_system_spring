@@ -1,4 +1,5 @@
 package com.vrsingh.sms.student_management_system_spring.service;
+
 import com.vrsingh.sms.student_management_system_spring.entity.Grade;
 import com.vrsingh.sms.student_management_system_spring.entity.Student;
 import com.vrsingh.sms.student_management_system_spring.entity.Course;
@@ -6,9 +7,10 @@ import com.vrsingh.sms.student_management_system_spring.repository.GradeReposito
 import com.vrsingh.sms.student_management_system_spring.repository.StudentRepository;
 import com.vrsingh.sms.student_management_system_spring.repository.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class GradeService {
@@ -26,8 +28,9 @@ public class GradeService {
         this.courseRepository = courseRepository;
     }
 
-    public List<Grade> getAllGrades() {
-        return gradeRepository.findAll();
+    public Page<Grade> getAllGrades(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return gradeRepository.findAll(pageable);
     }
 
     public Grade addGrade(Long studentId, Long courseId, String examType, Integer marks) {

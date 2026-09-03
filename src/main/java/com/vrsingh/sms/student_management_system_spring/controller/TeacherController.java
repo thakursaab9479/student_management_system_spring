@@ -3,11 +3,10 @@ package com.vrsingh.sms.student_management_system_spring.controller;
 import com.vrsingh.sms.student_management_system_spring.entity.Teacher;
 import com.vrsingh.sms.student_management_system_spring.service.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/teachers")
@@ -22,8 +21,10 @@ public class TeacherController {
 
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
     @GetMapping
-    public List<Teacher> getAllTeachers() {
-        return teacherService.getAllTeachers();
+    public Page<Teacher> getAllTeachers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return teacherService.getAllTeachers(page, size);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")

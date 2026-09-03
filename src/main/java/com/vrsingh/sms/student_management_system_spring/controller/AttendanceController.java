@@ -3,11 +3,11 @@ package com.vrsingh.sms.student_management_system_spring.controller;
 import com.vrsingh.sms.student_management_system_spring.entity.Attendance;
 import com.vrsingh.sms.student_management_system_spring.service.AttendanceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/attendance")
@@ -22,8 +22,10 @@ public class AttendanceController {
 
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER','STUDENT')")
     @GetMapping
-    public List<Attendance> getAllAttendance() {
-        return attendanceService.getAllAttendance();
+    public Page<Attendance> getAllAttendance(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return attendanceService.getAllAttendance(page, size);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")

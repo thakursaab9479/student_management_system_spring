@@ -1,4 +1,5 @@
 package com.vrsingh.sms.student_management_system_spring.service;
+
 import com.vrsingh.sms.student_management_system_spring.entity.Attendance;
 import com.vrsingh.sms.student_management_system_spring.entity.Student;
 import com.vrsingh.sms.student_management_system_spring.entity.Course;
@@ -6,10 +7,12 @@ import com.vrsingh.sms.student_management_system_spring.repository.AttendanceRep
 import com.vrsingh.sms.student_management_system_spring.repository.StudentRepository;
 import com.vrsingh.sms.student_management_system_spring.repository.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Service
 public class AttendanceService {
@@ -27,8 +30,9 @@ public class AttendanceService {
         this.courseRepository = courseRepository;
     }
 
-    public List<Attendance> getAllAttendance() {
-        return attendanceRepository.findAll();
+    public Page<Attendance> getAllAttendance(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return attendanceRepository.findAll(pageable);
     }
 
     public Attendance markAttendance(Long studentId, Long courseId, LocalDate classDate, String status) {

@@ -3,10 +3,9 @@ package com.vrsingh.sms.student_management_system_spring.controller;
 import com.vrsingh.sms.student_management_system_spring.entity.Grade;
 import com.vrsingh.sms.student_management_system_spring.service.GradeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/grades")
@@ -21,8 +20,10 @@ public class GradeController {
 
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER','STUDENT')")
     @GetMapping
-    public List<Grade> getAllGrades() {
-        return gradeService.getAllGrades();
+    public Page<Grade> getAllGrades(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return gradeService.getAllGrades(page, size);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")

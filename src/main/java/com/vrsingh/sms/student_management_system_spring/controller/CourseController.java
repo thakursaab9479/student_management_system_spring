@@ -3,11 +3,10 @@ package com.vrsingh.sms.student_management_system_spring.controller;
 import com.vrsingh.sms.student_management_system_spring.entity.Course;
 import com.vrsingh.sms.student_management_system_spring.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/courses")
@@ -22,8 +21,10 @@ public class CourseController {
 
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER','STUDENT')")
     @GetMapping
-    public List<Course> getAllCourses() {
-        return courseService.getAllCourses();
+    public Page<Course> getAllCourses(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return courseService.getAllCourses(page, size);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER','STUDENT')")
